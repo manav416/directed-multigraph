@@ -24,7 +24,7 @@ import (
 
 type Edge struct {
 	source   *Vertex
-	jobid    int
+	data     interface{}
 	dest     *Vertex
 	edgeName string
 }
@@ -33,9 +33,9 @@ func (e Edge) String() string {
 	return fmt.Sprintf("%s --> %s (%s)", e.source, e.dest, e.edgeName)
 }
 
-func AddEdge(source *Vertex, jobID int, destination *Vertex) *Edge {
-	e := &Edge{source, jobID, destination, ""}
-	e.edgeName = fmt.Sprintf("%d--%s--%s", jobID, source.name, destination.name)
+func AddEdge(source *Vertex, data interface{}, destination *Vertex) *Edge {
+	e := &Edge{source, data, destination, ""}
+	e.edgeName = fmt.Sprintf("<%s -> %s>", source.name, destination.name)
 	source.Out = append(source.Out, e)
 	destination.In = append(destination.In, e)
 

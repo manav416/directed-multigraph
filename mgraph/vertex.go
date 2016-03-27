@@ -20,6 +20,14 @@ import (
 	"fmt"
 )
 
+// A Vertex represents a node in a directed multi graph.
+type Vertex struct {
+	name       string
+	In         []*Edge     // unordered set of incoming edges
+	Out        []*Edge     // unordered set of outgoing edges
+	vertexData interface{} // store information specific to the Vertex
+}
+
 type Graph struct {
 	Vertices map[string]*Vertex //Map of vertices by their names
 }
@@ -31,24 +39,17 @@ func NewGraph() *Graph {
 }
 
 // CreateVertex returns a Vertex in the graph, creating it if not present.
-func (g *Graph) CreateVertex(Nodename string) *Vertex {
+func (g *Graph) CreateVertex(Nodename string, data interface{}) *Vertex {
 	n, ok := g.Vertices[Nodename]
 	if !ok {
-		n = &Vertex{name: Nodename}
+		n = &Vertex{name: Nodename, vertexData: data}
 		g.Vertices[Nodename] = n
 	}
 	return n
 }
 
-// A Vertex represents a node in a directed multi graph.
-type Vertex struct {
-	name string
-	In   []*Edge // unordered set of incoming edges
-	Out  []*Edge // unordered set of outgoing edges
-}
-
 func (n *Vertex) String() string {
-	return fmt.Sprintf("vtx:%s", n.name)
+	return fmt.Sprintf("<%s>", n.name)
 }
 
 func (g *Graph) DeleteVertex(n *Vertex) {
@@ -73,4 +74,12 @@ func (n *Vertex) deleteOuts() {
 		removeInEdge(e)
 	}
 	n.Out = nil
+}
+
+func (n Vertex) GetData() interface{} {
+	return n.vertexData
+}
+
+func (n Vertex) GetVertexName() string {
+	return n.name
 }
